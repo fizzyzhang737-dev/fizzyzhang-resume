@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>张与姚 - 个人简历</title>
+    <style>
+        /* ==========================================================================
+           1. 全局变量与基础重置
+           ========================================================================== */
+        :root {
+            --bg-color: #f5f5f7; 
+            --card-bg: rgba(255, 255, 255, 0.65); 
+            --text-primary: #1d1d1f;
+            --text-secondary: #55555c;
+            --accent-color: #0071e3; 
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow-subtle: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 14px 32px rgba(0, 0, 0, 0.08);
+            --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+        body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-primary); overflow: hidden; }
+
+        /* ==========================================================================
+           2. 布局与滚动捕捉
+           ========================================================================== */
+        #app-container {
+            height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scroll-behavior: smooth;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        #app-container::-webkit-scrollbar { display: none; }
+
+        .section {
+            min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 10vh 5vw; position: relative;
+        }
+
+        .section-content { width: 100%; max-width: 860px; z-index: 2; }
+
+        /* ==========================================================================
+           3. 核心排版
+           ========================================================================== */
+        h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; }
+        h1 { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.2; margin-bottom: 0.5rem; }
+        h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 2rem; color: var(--text-primary); text-align: center; }
+        .text-gradient { background: linear-gradient(135deg, #1d1d1f 0%, #555555 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ==========================================================================
+           4. 组件样式 (Widgets & Cards)
+           ========================================================================== */
+        .avatar-container {
+            width: 130px; height: 130px; margin: 0 auto 1.5rem auto; border-radius: 50%; padding: 4px;
+            background: linear-gradient(135deg, var(--accent-color), #34c759); box-shadow: var(--shadow-subtle);
+            transition: transform 0.4s var(--ease-bounce); position: relative;
+        }
+        .avatar-container:hover { transform: scale(1.05) rotate(3deg); box-shadow: var(--shadow-hover); }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-color); }
+
+        .status-pill {
+            position: absolute; top: -10px; right: -15px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+            background: #ffffff; border-radius: 30px; box-shadow: var(--shadow-hover); border: 1px solid #e5e5ea;
+            font-size: 0.85rem; color: var(--text-primary); font-weight: 600; animation: float 4s ease-in-out infinite; z-index: 10;
+        }
+        .status-dot { width: 8px; height: 8px; background-color: #34c759; border-radius: 50%; position: relative; }
+        .status-dot::after { content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border: 2px solid #34c759; border-radius: 50%; animation: pulse 2s infinite cubic-bezier(0.25, 1, 0.5, 1); }
+
+        .glass-card {
+            background: var(--card-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border); box-shadow: var(--shadow-subtle); border-radius: 20px; 
+            padding: 1.8rem 2.2rem; transition: all 0.5s var(--ease-apple); cursor: pointer; 
+            position: relative; overflow: hidden; text-align: left; display: flex; align-items: center; gap: 1.5rem;
+        }
+        .glass-card:hover { transform: translateY(-5px) scale(1.01); box-shadow: var(--shadow-hover); background: rgba(255, 255, 255, 0.95); }
+        
+        .company-card { flex-direction: column !important; align-items: flex-start !important; cursor: default !important; }
+        .company-header { display: flex; align-items: center; gap: 1.2rem; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 0.5rem; }
+        .timeline-container { width: 100%; display: flex; flex-direction: column; gap: 1rem; padding-left: 1.2rem; border-left: 2px dashed #d2d2d7; margin-left: 1.2rem; }
+        .role-item { cursor: pointer; position: relative; padding: 0.8rem; border-radius: 12px; transition: background 0.3s; }
+        .role-item:hover { background: rgba(0, 113, 227, 0.05); }
+        .role-item::before { content: ''; position: absolute; left: -1.65rem; top: 1.3rem; width: 12px; height: 12px; border-radius: 50%; background: var(--bg-color); border: 2px solid var(--accent-color); z-index: 1;}
+
+        .card-icon-box {
+            width: 54px; height: 54px; flex-shrink: 0; display: flex; justify-content: center; align-items: center;
+            background: rgba(0, 113, 227, 0.08); color: var(--accent-color); border-radius: 16px; transition: all 0.4s var(--ease-bounce);
+        }
+        .glass-card:hover .card-icon-box { background: var(--accent-color); color: #fff; transform: scale(1.1) rotate(-5deg); }
+        .card-icon-box svg { width: 28px; height: 28px; stroke-width: 1.8; }
+
+        .card-content { flex: 1; min-width: 0; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem;}
+        .card-title { font-size: 1.25rem; color: var(--text-primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .card-date { font-size: 0.9rem; color: var(--text-secondary); background: #f0f0f5; padding: 0.2rem 0.8rem; border-radius: 12px; }
+        .card-meta { font-size: 0.95rem; color: var(--text-secondary); }
+
+        .card-arrow {
+            width: 36px; height: 36px; flex-shrink: 0; background: #f0f0f5; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            color: var(--text-primary); opacity: 0; transform: translateX(-15px) rotate(-45deg); transition: all 0.4s var(--ease-bounce);
+        }
+        .glass-card:hover .card-arrow { opacity: 1; transform: translateX(0) rotate(0); background: var(--bg-color);}
+
+        /* ==========================================================================
+           作品集专属水平滑动样式
+           ========================================================================== */
+        .portfolio-slider-container {
+            width: 100vw; 
+            margin-left: calc(-50vw + 50%); /* 突破 max-width 限制，撑满屏幕宽度 */
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            display: flex;
+            scrollbar-width: none; /* Firefox 隐藏滚动条 */
+            -ms-overflow-style: none; /* IE 隐藏滚动条 */
+            padding-bottom: 1rem;
+        }
+        .portfolio-slider-container::-webkit-scrollbar {
+            display: none; /* Chrome 隐藏滚动条 */
+        }
+        .portfolio-page {
+            min-width: 100vw;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 5vw;
+        }
+        .portfolio-page-content {
+            width: 100%;
+            max-width: 860px;
+        }
+        
+        .portfolio-category { 
+            font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 1rem; 
+            padding-left: 0.8rem; border-left: 4px solid var(--accent-color); font-weight: 600; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .portfolio-page-indicator {
+            font-size: 0.9rem; color: #8e8e93; font-weight: normal;
+        }
+
+        .swipe-hint-box {
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            margin-top: 1.5rem; color: var(--accent-color); font-size: 0.95rem; font-weight: 500;
+        }
+        .swipe-hint-icon {
+            animation: slideRight 1.5s ease-in-out infinite;
+        }
+
+        @keyframes slideRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(8px); }
+        }
+
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .photo-card { border-radius: 16px; overflow: hidden; cursor: pointer; background: #fff; box-shadow: var(--shadow-subtle); transition: all 0.4s var(--ease-bounce); border: 1px solid var(--glass-border); }
+        .photo-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: var(--shadow-hover); }
+        .photo-card img { width: 100%; height: 150px; object-fit: cover; display: block; border-bottom: 1px solid #f0f0f5;}
+        .photo-title { padding: 0.8rem 1rem; font-size: 0.95rem; text-align: center; color: var(--text-primary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .badge { display: inline-block; padding: 0.6rem 1.2rem; margin: 0.4rem; border-radius: 30px; background: #ffffff; border: 1px solid #e5e5ea; box-shadow: 0 2px 8px rgba(0,0,0,0.02); font-size: 0.95rem; color: var(--text-primary); transition: all 0.4s var(--ease-bounce); cursor: default; }
+        .badge:hover { transform: translateY(-6px) rotate(2deg) scale(1.05); background: var(--accent-color); color: #ffffff; border-color: var(--accent-color); box-shadow: 0 8px 16px rgba(0, 113, 227, 0.2); }
+        .badge.outline { background: transparent; border-color: #d2d2d7; color: var(--text-secondary); }
+
+        .skill-title { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1rem; font-weight: 500; }
+        .skill-title svg { width: 20px; height: 20px; color: var(--accent-color); }
+
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2.5rem; margin-top: 1.5rem;
+            background: var(--text-primary); color: #fff; font-size: 1.05rem; font-weight: 600; border-radius: 40px;
+            border: none; cursor: pointer; text-decoration: none; box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: all 0.4s var(--ease-bounce);
+        }
+        .cta-btn:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 15px 30px rgba(0,0,0,0.25); background: var(--accent-color); border-color: var(--accent-color) !important; color: #fff !important;}
+        .cta-btn svg { width: 22px; height: 22px; }
+
+        /* ==========================================================================
+           5. 页面布局与动画
+           ========================================================================== */
+        .hero-section { text-align: center; }
+        .hero-subtitle { font-size: clamp(1.2rem, 2vw, 1.5rem); color: var(--text-secondary); margin-bottom: 2rem; }
+        .contact-info { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; font-size: 0.95rem; flex-wrap: wrap;}
+        .contact-info span { background: #fff; padding: 0.5rem 1.2rem; border-radius: 20px; border: 1px solid #e5e5ea; box-shadow: var(--shadow-subtle); }
+
+        .summary-grid, .grid-container { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+        .summary-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+        .skills-container { text-align: center; }
+        .skills-group { margin-bottom: 2.5rem; }
+
+        .end-card { text-align: center; padding: 3rem 2rem; background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%); border: 1px solid #fff; }
+        .end-card h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1rem; color: var(--text-primary); }
+        .end-card p { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; max-width: 600px; margin: 0 auto; }
+
+        .contact-box { 
+            margin-top: 2.5rem; 
+            display: inline-flex; 
+            flex-direction: column; 
+            gap: 1.2rem; 
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px); 
+            padding: 2rem 3.5rem; 
+            border-radius: 20px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: var(--shadow-subtle); 
+            align-items: center; 
+        }
+        .contact-row { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-size: 1.05rem; 
+            color: var(--text-secondary); 
+            width: 100%; 
+            justify-content: flex-start; 
+        }
+        .contact-row a { color: var(--accent-color); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .contact-row a:hover { text-decoration: underline; color: #005bb5; }
+
+        @keyframes pulse { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s var(--ease-apple); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
+
+        /* ==========================================================================
+           6. 模态框 (Modal)
+           ========================================================================== */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(245, 245, 247, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-apple); display: flex; justify-content: center; align-items: center; padding: 20px;}
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: #ffffff; border: 1px solid #e5e5ea; box-shadow: 0 25px 50px rgba(0,0,0,0.1); width: 100%; max-width: 750px; max-height: 85vh; overflow-y: auto; border-radius: 24px; padding: 3rem; position: relative; transform: translateY(50px) scale(0.95); transition: all 0.4s var(--ease-apple); }
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+        .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: #f5f5f7; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease; z-index: 10; }
+        .modal-close:hover { background: #e5e5ea; transform: rotate(90deg); }
+        
+        #modal-body .modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem; }
+        #modal-body h3 { font-size: 1.6rem; line-height: 1.3; margin: 0;}
+        #modal-body h4 { font-size: 1.05rem; color: var(--accent-color); margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 500; border-bottom: 1px solid #f0f0f5; padding-bottom: 1rem;}
+        #modal-body ul { list-style: none; padding-left: 0; }
+        #modal-body li { position: relative; padding-left: 1.5rem; margin-bottom: 1.2rem; font-size: 1.05rem; color: var(--text-secondary); line-height: 1.8; }
+        #modal-body li::before { content: '•'; position: absolute; left: 0; color: var(--accent-color); font-size: 1.5rem; top: -0.2rem; }
+        #modal-body li strong { color: var(--text-primary); font-weight: 600; }
+        #modal-body p.modal-text { font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1rem; text-align: justify;}
+
+        .report-content { margin-top: 1.5rem; padding-right: 5px;}
+        .report-content p { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1.2rem; text-indent: 2em; text-align: justify; }
+
+        /* ==========================================================================
+           作品集电脑端优化：左右导航按钮与拖拽
+           ========================================================================== */
+        .portfolio-wrapper { position: relative; width: 100%; }
+        
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            box-shadow: var(--shadow-hover);
+            color: var(--text-primary);
+            display: none; /* 默认隐藏，媒体查询中针对PC端开启 */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s var(--ease-bounce);
+        }
+        .slider-nav-btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .slider-nav-btn.prev { left: 3vw; }
+        .slider-nav-btn.next { right: 3vw; }
+        .slider-nav-btn svg { width: 24px; height: 24px; }
+
+        .portfolio-slider-container { cursor: grab; }
+        .portfolio-slider-container.grabbing {
+            cursor: grabbing !important;
+            scroll-snap-type: none !important; /* 拖拽时取消强制吸附，更加丝滑 */
+        }
+
+        /* 电脑端显示按钮并适配文案 */
+        @media (min-width: 768px) {
+            .portfolio-wrapper:hover .slider-nav-btn { display: flex; }
+            .swipe-hint-box { font-size: 0; } /* 隐藏原文字 */
+            .swipe-hint-box::before { content: "可鼠标拖拽或点击两侧按钮查看更多"; font-size: 0.95rem; display: block; }
+            .swipe-hint-icon { display: none; } /* 电脑端隐藏滑动小箭头 */
+        }
+
+        /* ==========================================================================
+           7. 打印排版 (Print)
+           ========================================================================== */
+        @media print {
+            body, #app-container { overflow: visible !important; height: auto !important; background-color: #ffffff; }
+            .section { min-height: auto; height: auto !important; scroll-snap-align: none; padding: 1.5rem 0; page-break-inside: avoid; justify-content: flex-start; }
+            .modal-overlay, .status-pill, .card-arrow, .contact-box, .cta-btn, .swipe-hint-box, .slider-nav-btn { display: none !important; }
+            .portfolio-slider-container { display: block; overflow: visible; margin: 0; width: 100%; }
+            .portfolio-page { padding: 0; min-width: auto; margin-bottom: 2rem; page-break-inside: avoid;}
+            .text-gradient { background: none; -webkit-text-fill-color: #000; color: #000; }
+            .avatar-container { width: 80px; height: 80px; box-shadow: none; border: none; background: none; margin-bottom: 1rem;}
+            .avatar { border: 2px solid #ddd; }
+            .glass-card { background: none; border: 1px solid #d2d2d7; padding: 1.5rem; margin-bottom: 1rem; box-shadow: none !important; transform: none !important; align-items: flex-start;}
+            .card-icon-box { display: none; } 
+            .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+            h1 { font-size: 2rem; } h2 { font-size: 1.4rem; text-align: left; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+            .badge { border: 1px solid #ccc; color: #333; padding: 0.2rem 0.6rem; margin: 0.2rem; box-shadow: none; transform: none !important; font-size: 0.85rem;}
+            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .photo-card { border: none; box-shadow: none; }
+            .photo-card img { height: 120px; border-radius: 8px;}
+            @page { margin: 1.5cm; }
+            .glass-card::after { content: attr(data-print-details); display: block; white-space: pre-wrap; margin-top: 1rem; font-size: 0.95rem; color: #333; line-height: 1.6; font-weight: normal; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container"></div>
+
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           图标库 (SF Symbols 风格线性 SVG)
+           ========================================================================== */
+        const svgs = {
+            'edu': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
+            'pen': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>`,
+            'bulb': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>`,
+            'star': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+            'briefcase': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2" ry="2"/><path d="M3 12h18"/><path d="M16 8V6a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M10 12v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2"/><path d="M3 9l9 3 9-3"/></svg>`,
+            'rocket': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`,
+            'tool': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`,
+            'globe': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+            'heart': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+            'mail': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+            'link': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
+            'doc': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+            'phone': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
+        };
+
+        const resumeData = {
+            hero: {
+                name: "张与姚", title: "品牌公关 / 企业文化 / GR", status: "在职，正在找工作",
+                avatarUrl: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=400&q=80", 
+                contact: ["187-1783-6599", "上海、苏州、杭州"]
+            },
+            summary: [
+                { id: "sum1", icon: "edu", title: "教育背景", content: "毕业于安徽大学（211）新闻学专业，具备扎实的文字功底与媒体素养。" }, 
+                { id: "sum2", icon: "pen", title: "核心竞争力", content: "3年大型央企（中建三局）综合管理经验（党团宣），擅长全媒体矩阵运营。" },
+                { id: "sum3", icon: "bulb", title: "业绩亮点", content: "曾以职能岗第一名转正（2024），荣获中建三局2024年度党建宣系统先进个人（2025）；拥有百万级流量内容策划经验（单条视频播放40w+）；拥有主笔万字级企业战略报告经验（党委工作报告）；具备较强的交付能力，能较好应对压力。" },
+                { id: "sum4", icon: "star", title: "个人优势", content: "兼具公文写作、活动统筹与视频拍剪编的复合型能力，能快速适应快节奏与多线程工作。" }
+            ],
+            experience: [
+                {
+                    company: "中建三局第一建设工程有限责任公司",
+                    roles: [
+                        { id: "exp1", title: "品牌公关与新媒体运营", date: "2023.07 - 2026.02", location: "上海", details: ["负责全媒体矩阵的策划与运营，通过三级融媒体平台，发布高质量稿件600余篇，全网曝光量超百万。", "主导爆款短视频内容的策划与制作，达成单条播放量超40万。", "优化舆情风控管理体系，牵头网评员队伍建设，任职期间未出现重大舆情事故。", "与核心权威媒体协作，实现国家级/省部级媒体发稿60余篇。"] },
+                        { id: "exp2", title: "行政管理与公文写作", date: "2024.01 - 2026.02", location: "上海", details: ["主笔《党委/团委年度工作报告》、《部门述职报告》、《意识形态工作报告》等万字级核心材料。",  "优化迎检备查工作机制，助力公司以高分通过多次集团级验收。"] },
+                        { id: "exp3", title: "企业文化与政府关系", date: "2024.02 - 2026.02", location: "上海", details: ["负责大型企业文化活动的统筹落地，成功筹备公司工作会、五四活动、新员工入职活动等多场大型活动（近三年，主会场超200人）。", "主导雇主品牌与CSR项目建设，达成央企社会责任形象的深度树立。", "推动“青年安全生产示范岗”等申报评选工作，实现获评省部级以上荣誉10余项。"] }
+                    ]
+                }
+            ],
+            projects: [
+                { id: "proj1", name: "小米集团华东总部项目品牌传播", role: "项目牵头人", date: "2024.03 - 2024.09", location: "南京", details: ["<strong>前期准备：</strong>敏锐捕捉“小米汽车”热点，制定“蹭热点、树品牌”营销策略。", "<strong>内容生产：</strong>针对官媒撰写深度通稿；亲自剪辑快节奏短视频，突出科技感。", "<strong>立体分发：</strong>统筹微信深度解读、短视频流量引爆、外部官媒背书的同步推进。", "<strong>成果交付：</strong>获新华社刊发，全平台阅读/播放量突破100万+，成标杆案例。"] },
+                { id: "proj2", name: "上海市“青年安全生产示范岗”创建", role: "项目负责人", date: "2024.01 - 2024.06", location: "上海", details: ["<strong>机制搭建：</strong>建立“标准化指导+全过程纠偏”机制，统筹协调多部门协同作战。", "<strong>全周期管控：</strong>组织模拟检查与答辩，现场督导关键节点，确保台账与实物一致。", "<strong>材料打磨：</strong>主笔全套申报材料，提炼“青安岗”模式亮点。", "<strong>成果交付：</strong>顺利通过验收，获评2023年度上海市荣誉，实现荣誉与管理双赢。"] }
+            ],
+            skills: { core: ["AI工具应用","公文写作", "新闻采编", "摄影摄像","剪辑后期", "舆情监测", "活动策划" ], language: ["中文（母语）", "英语（CET-6）"], others: ["摄影", "足球"] },
+            
+            portfolio: {
+                articles: [
+                    { title: "华东公司召开第三次党员代表大会", url: "https://mp.weixin.qq.com/s/VWsGKXDavTi2tadj6BlTrw" },
+                  { title: "冲刺“十四五” | 中建三局一公司华东公司：锚定目标，久久为功，奋力实现升维发展", url: "https://mp.weixin.qq.com/s/FfPl0uOq03J5FQBdTuyvrQ" },
+                   { title: "中建三局一公司召开2025年半年运营情况分析会暨第二次改革管理论坛", url: "https://mp.weixin.qq.com/s/Huw-D-XdnSB2bqZ0A2WY1w" },
+                  { title: "产品推介 | 中建三局一公司超高层建筑产品线——上海市杨浦区第一高楼", url: "https://mp.weixin.qq.com/s/HcmeIMz9QxWoaxHDd5IJ3w" },
+                  { title: "啧啧啧，我的机器人同事强到离谱！", url: "https://mp.weixin.qq.com/s/OgxIYKlQap-b5wzRWj2bjA" },
+                    { title: "跃动杭州：建筑在千古江南和数字脉搏之间", url: "https://mp.weixin.qq.com/s/h8OobhbAxve9hKYqROETww" }
+                ],
+                reports: [
+                    {
+                        id: "rep1",
+                        title: "华东公司党委2026年工作报告（大纲）",
+                        paragraphs: [
+                            "<strong>一、2025 年工作回顾</strong>",
+                            "<strong>（一）强化政治引领，把准高质量发展方向舵</strong>",
+                            "• 筑牢思想根基，提升 “政治三力”",
+                            "• 融入国家战略，优化市场布局",
+                            "• 深化整改整治，净化政治生态",
+                            "<strong>（二）聚焦价值创造，筑牢高质量发展压舱石</strong>",
+                            "• 深化改革创新，激发组织效能",
+                            "• 筑牢风控防线，守牢安全底线",
+                            "<strong>（三）夯实基层堡垒，凝聚高质量发展向心力</strong>",
+                            "• 建强战斗堡垒，锻造过硬队伍",
+                            "• 弘扬争先文化，共建幸福华东",
+                            "<strong>过去五年发展总结</strong>",
+                            "• 过去五年，我们迎难而上，综合实力在复杂变局中稳步提升",
+                            "• 过去五年，我们聚焦主业，核心能力在转型升级中系统增强",
+                            "• 过去五年，我们直面挑战，发展质效在深刻自省中寻求突破",
+                            "<strong>二、关于 2026 年工作安排</strong>",
+                            "<strong>（一）把准政治方向，筑牢创新发展根本遵循</strong>",
+                            "• 坚持思想领航，提升决策驾驭力",
+                            "• 坚持战略引领，擘画发展蓝图",
+                            "• 坚持深化改革，升级核心竞争力",
+                            "<strong>（二）统揽发展大局，锚定创新发展战略目标</strong>",
+                            "• 统筹 “稳” 与 “进”，优化市场布局",
+                            "• 聚焦 “质” 与 “效”，打造标杆工程",
+                            "• 贯通 “源” 与 “流”，提升盈利水平",
+                            "• 驱动 “新” 与 “变”，培育核心优势",
+                            "• 严控 “险” 与 “患”，护航行稳致远",
+                            "<strong>（三）狠抓落地见效，激发创新发展强劲动能</strong>",
+                            "• 强基固本，筑牢战斗堡垒",
+                            "• 选贤任能，激活人才引擎",
+                            "• 凝心聚力，共绘发展同心圆",
+                            "<strong>（四）强化监督风控，巩固创新发展坚实基础</strong>",
+                            "• 做深政治监督，筑牢廉洁防线",
+                            "• 做实价值审计，赋能管理提升",
+                            "• 做细合规管理，实现事前预防"
+                        ]
+                    },
+                    {
+                       id: "rep2",
+                       title: "华东公司2025年工作述职报告（大纲）",
+                        paragraphs: [
+                            "<strong>一、2025年主要工作完成情况</strong>",
+                            "<strong>（一）党建引领，筑牢根基，组织活力显著增强</strong>",
+                            "• 组织建设强基固本",
+                            "• 作风建设从严从实",
+                            "• 扎实开展巡视整改",
+                            "• 品牌建设提质创优",
+                            "<strong>（二）经营提质，稳中向好，发展动能持续释放</strong>",
+                            "• 组织效能持续攀升，治理体系更优",
+                            "• 高端营销成果显著，市场版图更广",
+                            "• 均质履约品质跃升，建造支撑更强",
+                            "• 运营品质提质增效，盈利成效更实",
+                            "• 风险防控精准发力，安全底线更牢",
+                            "<strong>二、存在问题及不足</strong>",
+                            "• 业务结构优化还需加快",
+                            "• 盈利水平还需提高",
+                            "<strong>三、2026年工作思路和举措</strong>",
+                            "<strong>（一）坚持以“深改革”为抓手、全力提升高效运转能力，在激发内生动能上实现新突破</strong>",
+                            "• 提升机构运营效能",
+                            "• 激活发展内生动能",
+                            "<strong>（二）坚持以“稳增长”为目标、全力提升综合营销能力，在打造多元业务上实现新突破</strong>",
+                            "• 深化营销体系变革",
+                            "• 持续优化区域布局",
+                            "• 持续强化法人深耕",
+                            "• 做强多元业务发展",
+                            "<strong>（三）坚持以“强中台”为基石、全力提升平台化履约能力，在塑强品牌优势上实现新突破</strong>",
+                            "• 升级平台化履约体系",
+                            "• 建强快速建造能力",
+                            "• 铸强标杆示范形象",
+                            "<strong>（四）坚持以“提效益”为核心、全力提升低成本运营能力，在提高发展品质上实现新突破</strong>",
+                            "• 塑强低成本运营能力",
+                            "• 深挖效益增量空间",
+                            "• 改善资金运营品质",
+                            "<strong>（五）坚持以“控风险”为保障、全力提升四位一体防控能力，在筑牢行稳致远上实现新突破</strong>",
+                            "• 优化风控体系建设",
+                            "• 狠抓潜亏项目治理",
+                            "• 筑牢安全生产防线"
+                        ]
+                    }, 
+                  {
+                       id: "rep3",
+                    title: "华东公司团委2025年工作总结和2026年工作计划（大纲）",
+                        paragraphs: [
+                            "<strong>一、团组织基本情况</strong>",
+                            "• 组织建设更趋规范",
+                            "• 团员队伍素质优良",
+                            "• 品牌创建成果丰硕",
+                            "<strong>二、重点工作落实情况</strong>",
+                            "• 聚焦“思想领航”，在凝心铸魂中把准青春航向",
+                            "• 聚焦“中心大局”，在岗位建功中展现青春作为",
+                            "• 聚焦“桥梁纽带”，在服务奉献中传递青春温度",
+                            "<strong>三、存在的部分问题</strong>",
+                            "• 团的活动形式较为单一",
+                            "• 基层群团组织建设薄弱",
+                            "<strong>四、下一步工作计划</strong>",
+                            "• 牢记为党育人，加强思想建设",
+                            "• 坚持服务大局，助力岗位建功",
+                            "• 强化青年主体，搭建服务平台",
+                            "• 创新工作方法，激发组织活力"
+                        ]
+                    }, 
+                   {
+                       id: "rep4",
+                     title: "华东公司党群部年终述职报告（大纲）",
+                        paragraphs: [
+                            "<strong>一、主要指标完成情况</strong>",
+                            "<strong>二、亮点工作总结</strong>",
+                            "• 发挥“智囊”作用，服务决策部署把方向",
+                            "• 发挥“喉舌”作用，占领意识形态管大局",
+                            "• 发挥“手脚”作用，强化业务发展保落实",
+                            "<strong>三、重点工作完成情况</strong>",
+                            "• 强化政治建设，下好思想建设“指导棋”",
+                            "• 巩固基层党建，下好组织体系“导向棋”",
+                            "• 激发团队灵气，下好宣传教育“活力棋”",
+                            "• 凝聚一线力量，下好群团服务“互动棋”",
+                            "• 推进物业管理，下好后勤服务“保障棋”",
+                            "<strong>四、存在的问题和不足</strong>",
+                            "• 缺乏人员梯队建设，关键岗位缺少AB角缓冲",
+                            "<strong>五、2024年工作计划</strong>",
+                            "<strong>（一）主要目标和思路</strong>",
+                            "<strong>（二）主要工作措施</strong>",
+                            "• 聚焦“主题主线”，以绝对忠诚的政治品格当好党委的“领旗舵手”",
+                            "• 聚焦“主责主业”，以高度自觉的大局意识当好党委的“有力抓手”",
+                            "• 聚焦“主题主旨”，以守正创新的开拓精神当好党委的“时代鼓手”",
+                            "• 聚焦“暖心凝心”，以化雨成风的为民情怀当好党委的“幸福推手”"
+                        ]
+                    }, 
+                  {
+                       id: "rep5",
+                       title: "华东公司党委关于2025年意识形态工作责任制落实情况的报告（大纲）",
+                        paragraphs: [
+                            "<strong>一、意识形态工作责任制落实情况</strong>",
+                            "<strong>（一）强化责任担当，坚决落实意识形态工作责任制</strong>",
+                            "• 完善责任体系",
+                            "• 强化过程督导",
+                            "• 防范风险隐患",
+                            "<strong>（二）狠抓学习教育，牢牢把握意识形态方向盘</strong>",
+                            "• 深化理论武装",
+                            "• 扎实开展宣教工作",
+                            "• 深化形势任务教育",
+                            "<strong>（三）加强阵地建设，汇聚强大思想正能量</strong>",
+                            "• 聚焦主业讲好品牌故事",
+                            "• 提升舆论引导能力",
+                            "• 创新文化活动形式",
+                            "<strong>（四）强化荣誉创建，推进社会主义核心价值观建设</strong>",
+                            "• 荣誉创建成果丰硕",
+                            "• 党建品牌聚合力",
+                            "• 勇担央企社会责任",
+                            "• 落实幸福工程",
+                            "<strong>二、存在的不足</strong>",
+                            "• 系统性风险防范能力需进一步提升",
+                            "• 工作创新与精准性有待加强",
+                            "<strong>三、下一步工作计划</strong>",
+                            "<strong>（一）压实主体责任，锻造过硬队伍</strong>",
+                            "<strong>（二）深化理论武装，筑牢思想根基</strong>",
+                            "<strong>（三）严守阵地防线，提升治理效能</strong>",
+                            "<strong>（四）创新宣教载体，讲好生动故事</strong>"
+                        ]
+                    }
+                ],
+                photos: [
+                    { id: "photo1", title: "“2025年两岸青年乒乓球友谊赛”志愿服务", src: "photo1.jpg" },
+                   { id: "photo2", title: "新员工入职百天及书记面对面活动", src: "photo2.jpg" },
+                   { id: "photo3", title: "局庆60周年健步走活动", src: "photo3.jpg" },
+                   { id: "photo4", title: "新员工入职系列活动", src: "photo4.jpg" },
+                  { id: "photo5", title: "阿尔及利亚交流互访互学活动", src: "photo5.jpg" },
+                  { id: "photo6", title: "连续八年参与进博会志愿服务活动", src: "photo6.jpg" },
+                  { id: "photo7", title: "上海市青年安全生产示范岗位（2024）", src: "photo7.jpg" },
+                   { id: "photo8", title: "上海市重大工程青年突击队路演二等奖（2025）", src: "photo8.jpg" },
+                    { id: "photo9", title: "中建三局党建宣系统先进个人（2025）", src: "photo9.jpg" }
+                ]
+            }
+        };
+
+        /* ==========================================================================
+           渲染引擎
+           ========================================================================== */
+        function getPrintText(details) { return details.map(d => d.replace(/<[^>]*>?/gm, '')).join('\n• '); }
+
+        function renderApp() {
+            const container = document.getElementById('app-container');
+            
+            let html = `
+                <section class="section hero-section">
+                    <div class="section-content reveal">
+                        <div class="avatar-container">
+                            <div class="status-pill"><div class="status-dot"></div>在线</div>
+                            <img src="${resumeData.hero.avatarUrl}" alt="Avatar" class="avatar">
+                        </div>
+                        <h1 class="text-gradient">${resumeData.hero.name}</h1>
+                        <div class="hero-subtitle delay-1 reveal">${resumeData.hero.title}</div>
+                        <div class="contact-info delay-2 reveal">
+                            ${resumeData.hero.contact.map(info => `<span>${info}</span>`).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-content reveal">
+                        <h2>个人总结</h2>
+                        <div class="summary-grid delay-1 reveal">
+                            ${resumeData.summary.map(item => `
+                                <div class="glass-card" onclick="openModal('summary', '${item.id}')" data-print-details="${item.content}">
+                                    <div class="card-icon-box">${svgs[item.icon]}</div>
+                                    <div class="card-content"><div class="card-title">${item.title}</div></div>
+                                    <div class="card-arrow">→</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-content">
+                        <h2 class="reveal">工作经历</h2>
+                        <div class="grid-container">
+                            ${resumeData.experience.map((comp, index) => `
+                                <div class="glass-card company-card reveal delay-${index + 1}">
+                                    <div class="company-header">
+                                        <div class="card-icon-box" style="width: 48px; height: 48px;">${svgs.briefcase}</div>
+                                        <div class="card-title" style="font-size: 1.35rem; white-space: normal;">${comp.company}</div>
+                                    </div>
+                                    <div class="timeline-container">
+                                        ${comp.roles.map(role => `
+                                            <div class="role-item" onclick="openModal('exp', '${role.id}')">
+                                                <div class="card-header" style="margin-bottom: 0.2rem;">
+                                                    <div class="card-title" style="font-size: 1.15rem;">${role.title}</div>
+                                                    <div class="card-date">${role.date} | ${role.location}</div>
+                                                </div>
+                                                <div class="card-meta" style="color: var(--accent-color); font-size: 0.9rem;">查看详情 &rarr;</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-content">
+                        <h2 class="reveal">项目经历</h2>
+                        <div class="grid-container">
+                            ${resumeData.projects.map((proj, index) => `
+                                <div class="glass-card reveal delay-${(index % 3) + 1}" onclick="openModal('proj', '${proj.id}')" data-print-details="• ${getPrintText(proj.details)}">
+                                    <div class="card-icon-box" style="color: #ff9500; background: rgba(255, 149, 0, 0.08);">${svgs.rocket}</div>
+                                    <div class="card-content">
+                                        <div class="card-header">
+                                            <div class="card-title">${proj.name}</div>
+                                            <div class="card-date">${proj.date}</div>
+                                        </div>
+                                        <div class="card-meta">${proj.role}</div>
+                                    </div>
+                                    <div class="card-arrow">→</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-content skills-container">
+                        <h2 class="reveal">技能与其他</h2>
+                        <div class="skills-group reveal delay-1">
+                            <div class="skill-title">${svgs.tool} 核心技能</div>
+                            ${resumeData.skills.core.map(skill => `<span class="badge">${skill}</span>`).join('')}
+                        </div>
+                        <div class="skills-group reveal delay-2">
+                            <div class="skill-title">${svgs.globe} 语言能力</div>
+                            ${resumeData.skills.language.map(lang => `<span class="badge outline">${lang}</span>`).join('')}
+                        </div>
+                        <div class="skills-group reveal delay-3">
+                            <div class="skill-title">${svgs.heart} 兴趣与活动</div>
+                            ${resumeData.skills.others.map(item => `<span class="badge outline">${item}</span>`).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" style="padding-left: 0; padding-right: 0;">
+                    <div class="section-content reveal" style="max-width: none; text-align: center;">
+                        <h2 style="margin-bottom: 0;">作品集</h2>
+                        
+                        <div class="swipe-hint-box reveal delay-1">
+                            向右侧滑动查看更多
+                            <svg class="swipe-hint-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5l7 7"></path>
+                            </svg>
+                        </div>
+                        
+                        <div class="portfolio-wrapper">
+                            <button class="slider-nav-btn prev" onclick="scrollPortfolio(-1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <button class="slider-nav-btn next" onclick="scrollPortfolio(1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+
+                            <div class="portfolio-slider-container reveal delay-2">
+                                
+                                <div class="portfolio-page">
+                                    <div class="portfolio-page-content">
+                                        <h3 class="portfolio-category">微信公众号文章（节选） <span class="portfolio-page-indicator">1 / 3</span></h3>
+                                        <div class="grid-container" style="margin-bottom: 2rem;">
+                                            ${resumeData.portfolio.articles.map((art) => `
+                                                <a href="${art.url}" target="_blank" class="glass-card" style="text-decoration: none; padding: 1.2rem 1.8rem;" data-print-details="链接: ${art.url}">
+                                                    <div class="card-icon-box" style="width: 44px; height: 44px; background: rgba(52, 199, 89, 0.1); color: #34c759;">${svgs.link}</div>
+                                                    <div class="card-content">
+                                                        <div class="card-title" style="font-size: 1.1rem; white-space: normal; text-align: left;">${art.title}</div>
+                                                        <div class="card-meta" style="color: #34c759; font-size: 0.85rem; margin-top: 0.4rem; text-align: left;">点击阅读原文 ↗</div>
+                                                    </div>
+                                                </a>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="portfolio-page">
+                                    <div class="portfolio-page-content">
+                                        <h3 class="portfolio-category">执笔报告概览（节选） <span class="portfolio-page-indicator">2 / 3</span></h3>
+                                        <div class="grid-container" style="margin-bottom: 2rem;">
+                                            ${resumeData.portfolio.reports.map((rep) => `
+                                                <div class="glass-card" onclick="openModal('report', '${rep.id}')" style="padding: 1.2rem 1.8rem;">
+                                                    <div class="card-icon-box" style="width: 44px; height: 44px; background: rgba(0, 113, 227, 0.1); color: var(--accent-color);">${svgs.doc}</div>
+                                                    <div class="card-content">
+                                                        <div class="card-title" style="font-size: 1.1rem; white-space: normal; text-align: left;">${rep.title}</div>
+                                                        <div class="card-meta" style="color: var(--accent-color); font-size: 0.85rem; margin-top: 0.4rem; text-align: left;">点击查看报告结构 →</div>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="portfolio-page">
+                                    <div class="portfolio-page-content">
+                                        <h3 class="portfolio-category">活动现场实况照（节选） <span class="portfolio-page-indicator">3 / 3</span></h3>
+                                        <div class="photo-grid">
+                                            ${resumeData.portfolio.photos.map((photo) => `
+                                                <div class="photo-card" onclick="openModal('photo', '${photo.id}')">
+                                                    <img src="${photo.src}" alt="${photo.title}" loading="lazy">
+                                                    <div class="photo-title">${photo.title}</div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-content reveal end-card glass-card" style="display: block; cursor: default; position: relative;">
+                        <h2 class="text-gradient">期待与您共创未来！</h2>
+                        <p class="delay-1 reveal">希望能有机会将我扎实的公关运营经验与对行业的热爱融入您的团队。</p>
+                        
+                        <div class="contact-box delay-2 reveal">
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.2rem; margin-bottom: 0.5rem; text-align: center; letter-spacing: 1px;">立即联系我</div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                                <div class="contact-row">
+                                    <span style="display: flex; align-items: center; justify-content: center; background: rgba(0, 113, 227, 0.1); color: var(--accent-color); width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;">${svgs.phone}</span>
+                                    <span>电话：<a href="tel:18717836599">18717836599</a></span>
+                                </div>
+                                
+                                <div class="contact-row">
+                                    <span style="display: flex; align-items: center; justify-content: center; background: rgba(0, 113, 227, 0.1); color: var(--accent-color); width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;">${svgs.mail}</span>
+                                    <span>邮箱：<a href="mailto:18717836599@163.com">18717836599@163.com</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="delay-3 reveal" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #d2d2d7;">
+                            <a href="张与姚 - 简历.pdf" target="_blank" class="cta-btn outline" style="background: transparent; border: 2px solid var(--text-primary); color: var(--text-primary); box-shadow: none;">
+                                ${svgs.doc}
+                                查看 张与姚 - 简历
+                            </a>
+                        </div>
+                        
+                    </div>
+                </section>
+            `;
+            container.innerHTML = html;
+        }
+
+        /* ==========================================================================
+           交互逻辑与初始化
+           ========================================================================== */
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            }, { root: document.getElementById('app-container'), threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        const modalOverlay = document.getElementById('detail-modal');
+        const modalBody = document.getElementById('modal-body');
+
+        function openModal(type, id) {
+            if (type === 'summary') {
+                let item = resumeData.summary.find(i => i.id === id);
+                modalBody.innerHTML = `
+                    <div class="modal-header">
+                        <div class="card-icon-box" style="background:var(--accent-color); color:#fff; border-radius: 12px; width:44px; height:44px;">${svgs[item.icon]}</div>
+                        <h3>${item.title}</h3>
+                    </div>
+                    <p class="modal-text" style="margin-top:1.5rem;">${item.content}</p>
+                `;
+            } else if (type === 'exp') {
+                let item, companyName;
+                for (let comp of resumeData.experience) {
+                    item = comp.roles.find(i => i.id === id);
+                    if (item) { companyName = comp.company; break; }
+                }
+                modalBody.innerHTML = `
+                    <div class="modal-header">
+                        <div class="card-icon-box" style="background:var(--accent-color); color:#fff; border-radius: 12px; width:44px; height:44px;">${svgs.briefcase}</div>
+                        <h3 style="font-size: 1.4rem; white-space: normal;">${companyName}</h3>
+                    </div>
+                    <h4>${item.title} | ${item.date}</h4>
+                    <ul>${item.details.map(detail => `<li>${detail}</li>`).join('')}</ul>
+                `;
+            } else if (type === 'proj') {
+                let item = resumeData.projects.find(i => i.id === id);
+                modalBody.innerHTML = `
+                    <div class="modal-header">
+                        <div class="card-icon-box" style="background:#ff9500; color:#fff; border-radius: 12px; width:44px; height:44px;">${svgs.rocket}</div>
+                        <h3 style="font-size: 1.4rem; white-space: normal;">${item.name}</h3>
+                    </div>
+                    <h4>${item.role} | ${item.date}</h4>
+                    <ul>${item.details.map(detail => `<li>${detail}</li>`).join('')}</ul>
+                `;
+            } 
+            else if (type === 'report') {
+                let item = resumeData.portfolio.reports.find(i => i.id === id);
+                let reportHTML = item.paragraphs.map(p => `<p>${p}</p>`).join('');
+                modalBody.innerHTML = `
+                    <div class="modal-header" style="border-bottom: 1px solid #f0f0f5; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <div class="card-icon-box" style="background:var(--accent-color); color:#fff; border-radius: 12px; width:44px; height:44px; flex-shrink:0;">${svgs.doc}</div>
+                        <h3 style="font-size: 1.3rem; white-space: normal; line-height: 1.5;">${item.title}</h3>
+                    </div>
+                    <div class="report-content">
+                        ${reportHTML}
+                    </div>
+                `;
+            }
+            else if (type === 'photo') {
+                let item = resumeData.portfolio.photos.find(i => i.id === id);
+                modalBody.innerHTML = `
+                    <div style="text-align: center; padding-top: 10px;">
+                        <img src="${item.src}" alt="${item.title}" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-hover); border: 1px solid var(--glass-border);">
+                        <h4 style="margin-top: 1.5rem; border: none; font-size: 1.1rem; color: var(--text-primary); padding-bottom: 0;">${item.title}</h4>
+                    </div>
+                `;
+            }
+            modalOverlay.classList.add('active');
+        }
+
+        function closeModal() { modalOverlay.classList.remove('active'); }
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        /* ==========================================================================
+           作品集横向滚动与拖拽逻辑
+           ========================================================================== */
+        // 按钮点击滚动逻辑
+        function scrollPortfolio(direction) {
+            const slider = document.querySelector('.portfolio-slider-container');
+            if (slider) {
+                const scrollAmount = window.innerWidth; // 每次滚动一屏
+                slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        // 鼠标拖拽逻辑
+        function initSliderDrag() {
+            const slider = document.querySelector('.portfolio-slider-container');
+            if (!slider) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            let isDragging = false; // 用于判断是否发生拖拽，防止误触内部点击事件
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                isDragging = false;
+                slider.classList.add('grabbing');
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.classList.remove('grabbing');
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('grabbing');
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 1.5; // 滑动速度倍率
+                if (Math.abs(walk) > 10) isDragging = true; // 位移超过10px视为拖拽
+                slider.scrollLeft = scrollLeft - walk;
+            });
+
+            // 捕获阶段拦截点击事件：如果刚才在拖拽，则阻止打开模态框或跳转链接
+            slider.addEventListener('click', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderApp();
+            setTimeout(initScrollReveal, 100);
+            initSliderDrag(); // 初始化作品集拖拽功能
+        });
+    </script>
+</body>
+</html>
