@@ -108,17 +108,15 @@
            ========================================================================== */
         .portfolio-slider-container {
             width: 100vw; 
-            margin-left: calc(-50vw + 50%); /* 突破 max-width 限制，撑满屏幕宽度 */
+            margin-left: calc(-50vw + 50%);
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             display: flex;
-            scrollbar-width: none; /* Firefox 隐藏滚动条 */
-            -ms-overflow-style: none; /* IE 隐藏滚动条 */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             padding-bottom: 1rem;
         }
-        .portfolio-slider-container::-webkit-scrollbar {
-            display: none; /* Chrome 隐藏滚动条 */
-        }
+        .portfolio-slider-container::-webkit-scrollbar { display: none; }
         .portfolio-page {
             min-width: 100vw;
             scroll-snap-align: center;
@@ -127,27 +125,20 @@
             align-items: center;
             padding: 0 5vw;
         }
-        .portfolio-page-content {
-            width: 100%;
-            max-width: 860px;
-        }
+        .portfolio-page-content { width: 100%; max-width: 860px; }
         
         .portfolio-category { 
             font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 1rem; 
             padding-left: 0.8rem; border-left: 4px solid var(--accent-color); font-weight: 600; 
             display: flex; justify-content: space-between; align-items: center;
         }
-        .portfolio-page-indicator {
-            font-size: 0.9rem; color: #8e8e93; font-weight: normal;
-        }
+        .portfolio-page-indicator { font-size: 0.9rem; color: #8e8e93; font-weight: normal; }
 
         .swipe-hint-box {
             display: flex; justify-content: center; align-items: center; gap: 8px;
             margin-top: 1.5rem; color: var(--accent-color); font-size: 0.95rem; font-weight: 500;
         }
-        .swipe-hint-icon {
-            animation: slideRight 1.5s ease-in-out infinite;
-        }
+        .swipe-hint-icon { animation: slideRight 1.5s ease-in-out infinite; }
 
         @keyframes slideRight {
             0%, 100% { transform: translateX(0); }
@@ -195,28 +186,12 @@
         .end-card p { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; max-width: 600px; margin: 0 auto; }
 
         .contact-box { 
-            margin-top: 2.5rem; 
-            display: inline-flex; 
-            flex-direction: column; 
-            gap: 1.2rem; 
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px); 
-            padding: 2rem 3.5rem; 
-            border-radius: 20px; 
-            border: 1px solid var(--glass-border); 
-            box-shadow: var(--shadow-subtle); 
-            align-items: center; 
+            margin-top: 2.5rem; display: inline-flex; flex-direction: column; gap: 1.2rem; 
+            background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); 
+            padding: 2rem 3.5rem; border-radius: 20px; border: 1px solid var(--glass-border); 
+            box-shadow: var(--shadow-subtle); align-items: center; 
         }
-        .contact-row { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            font-size: 1.05rem; 
-            color: var(--text-secondary); 
-            width: 100%; 
-            justify-content: flex-start; 
-        }
+        .contact-row { display: flex; align-items: center; gap: 12px; font-size: 1.05rem; color: var(--text-secondary); width: 100%; justify-content: flex-start; }
         .contact-row a { color: var(--accent-color); text-decoration: none; font-weight: 500; transition: color 0.3s; }
         .contact-row a:hover { text-decoration: underline; color: #005bb5; }
 
@@ -250,60 +225,62 @@
         .report-content p { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1.2rem; text-indent: 2em; text-align: justify; }
 
         /* ==========================================================================
-           作品集电脑端优化：左右导航按钮与拖拽
+           7. 电脑端优化：左右导航按钮与拖拽
            ========================================================================== */
         .portfolio-wrapper { position: relative; width: 100%; }
         
         .slider-nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            box-shadow: var(--shadow-hover);
-            color: var(--text-primary);
-            display: none; /* 默认隐藏，媒体查询中针对PC端开启 */
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s var(--ease-bounce);
+            position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 50%; box-shadow: var(--shadow-hover);
+            color: var(--text-primary); display: none; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 10; transition: all 0.3s var(--ease-bounce);
         }
-        .slider-nav-btn:hover {
-            background: var(--accent-color);
-            color: #fff;
-            transform: translateY(-50%) scale(1.1);
-        }
+        .slider-nav-btn:hover { background: var(--accent-color); color: #fff; transform: translateY(-50%) scale(1.1); }
         .slider-nav-btn.prev { left: 3vw; }
         .slider-nav-btn.next { right: 3vw; }
         .slider-nav-btn svg { width: 24px; height: 24px; }
 
         .portfolio-slider-container { cursor: grab; }
-        .portfolio-slider-container.grabbing {
-            cursor: grabbing !important;
-            scroll-snap-type: none !important; /* 拖拽时取消强制吸附，更加丝滑 */
-        }
+        .portfolio-slider-container.grabbing { cursor: grabbing !important; scroll-snap-type: none !important; }
 
-        /* 电脑端显示按钮并适配文案 */
         @media (min-width: 768px) {
             .portfolio-wrapper:hover .slider-nav-btn { display: flex; }
-            .swipe-hint-box { font-size: 0; } /* 隐藏原文字 */
+            .swipe-hint-box { font-size: 0; }
             .swipe-hint-box::before { content: "可鼠标拖拽或点击两侧按钮查看更多"; font-size: 0.95rem; display: block; }
-            .swipe-hint-icon { display: none; } /* 电脑端隐藏滑动小箭头 */
+            .swipe-hint-icon { display: none; }
         }
 
         /* ==========================================================================
-           7. 打印排版 (Print)
+           8. PDF 简历查看器 (Mobile Return UI)
+           ========================================================================== */
+        .pdf-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f5f5f7; z-index: 2000;
+            display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s var(--ease-bounce);
+        }
+        .pdf-modal-overlay.active { transform: translateY(0); }
+        .pdf-header {
+            display: flex; align-items: center; padding: 0 15px; height: 55px; background: #ffffff;
+            border-bottom: 1px solid #e5e5ea; box-shadow: 0 2px 10px rgba(0,0,0,0.05); flex-shrink: 0;
+        }
+        .pdf-back-btn {
+            background: none; border: none; font-size: 1.05rem; color: var(--accent-color); font-weight: 500;
+            display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 5px 10px; margin-left: -10px; font-family: inherit;
+        }
+        .pdf-back-btn svg { width: 22px; height: 22px; }
+        .pdf-title {
+            flex: 1; text-align: center; font-size: 1.1rem; font-weight: 600; padding-right: 70px; /* 居中补偿 */
+        }
+        .pdf-iframe-container { flex: 1; width: 100%; height: 100%; overflow: hidden; -webkit-overflow-scrolling: touch; }
+        .pdf-iframe-container iframe { width: 100%; height: 100%; border: none; }
+
+        /* ==========================================================================
+           9. 打印排版 (Print)
            ========================================================================== */
         @media print {
             body, #app-container { overflow: visible !important; height: auto !important; background-color: #ffffff; }
             .section { min-height: auto; height: auto !important; scroll-snap-align: none; padding: 1.5rem 0; page-break-inside: avoid; justify-content: flex-start; }
-            .modal-overlay, .status-pill, .card-arrow, .contact-box, .cta-btn, .swipe-hint-box, .slider-nav-btn { display: none !important; }
+            .modal-overlay, .pdf-modal-overlay, .status-pill, .card-arrow, .contact-box, .cta-btn, .swipe-hint-box, .slider-nav-btn { display: none !important; }
             .portfolio-slider-container { display: block; overflow: visible; margin: 0; width: 100%; }
             .portfolio-page { padding: 0; min-width: auto; margin-bottom: 2rem; page-break-inside: avoid;}
             .text-gradient { background: none; -webkit-text-fill-color: #000; color: #000; }
@@ -333,9 +310,22 @@
         </div>
     </div>
 
+    <div id="pdf-viewer-overlay" class="pdf-modal-overlay">
+        <div class="pdf-header">
+            <button class="pdf-back-btn" onclick="closePdfViewer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> 
+                返回网站
+            </button>
+            <div class="pdf-title">张与姚 - 简历</div>
+        </div>
+        <div class="pdf-iframe-container">
+            <iframe id="pdf-iframe" src=""></iframe>
+        </div>
+    </div>
+
     <script>
         /* ==========================================================================
-           图标库 (SF Symbols 风格线性 SVG)
+           图标库
            ========================================================================== */
         const svgs = {
             'edu': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
@@ -370,7 +360,7 @@
                     company: "中建三局第一建设工程有限责任公司",
                     roles: [
                         { id: "exp1", title: "品牌公关与新媒体运营", date: "2023.07 - 2026.02", location: "上海", details: ["负责全媒体矩阵的策划与运营，通过三级融媒体平台，发布高质量稿件600余篇，全网曝光量超百万。", "主导爆款短视频内容的策划与制作，达成单条播放量超40万。", "优化舆情风控管理体系，牵头网评员队伍建设，任职期间未出现重大舆情事故。", "与核心权威媒体协作，实现国家级/省部级媒体发稿60余篇。"] },
-                        { id: "exp2", title: "行政管理与公文写作", date: "2024.01 - 2026.02", location: "上海", details: ["主笔《党委/团委年度工作报告》、《部门述职报告》、《意识形态工作报告》等万字级核心材料。",  "优化迎检备查工作机制，助力公司以高分通过多次集团级验收。"] },
+                        { id: "exp2", title: "行政管理与公文写作", date: "2024.01 - 2026.02", location: "上海", details: ["主笔《党委/团委年度工作报告》、《部门述职报告》、《意识形态工作报告》等万字级核心材料。", "优化迎检备查工作机制，助力公司以高分通过多次集团级验收。"] },
                         { id: "exp3", title: "企业文化与政府关系", date: "2024.02 - 2026.02", location: "上海", details: ["负责大型企业文化活动的统筹落地，成功筹备公司工作会、五四活动、新员工入职活动等多场大型活动（近三年，主会场超200人）。", "主导雇主品牌与CSR项目建设，达成央企社会责任形象的深度树立。", "推动“青年安全生产示范岗”等申报评选工作，实现获评省部级以上荣誉10余项。"] }
                     ]
                 }
@@ -384,10 +374,10 @@
             portfolio: {
                 articles: [
                     { title: "华东公司召开第三次党员代表大会", url: "https://mp.weixin.qq.com/s/VWsGKXDavTi2tadj6BlTrw" },
-                  { title: "冲刺“十四五” | 中建三局一公司华东公司：锚定目标，久久为功，奋力实现升维发展", url: "https://mp.weixin.qq.com/s/FfPl0uOq03J5FQBdTuyvrQ" },
-                   { title: "中建三局一公司召开2025年半年运营情况分析会暨第二次改革管理论坛", url: "https://mp.weixin.qq.com/s/Huw-D-XdnSB2bqZ0A2WY1w" },
-                  { title: "产品推介 | 中建三局一公司超高层建筑产品线——上海市杨浦区第一高楼", url: "https://mp.weixin.qq.com/s/HcmeIMz9QxWoaxHDd5IJ3w" },
-                  { title: "啧啧啧，我的机器人同事强到离谱！", url: "https://mp.weixin.qq.com/s/OgxIYKlQap-b5wzRWj2bjA" },
+                    { title: "冲刺“十四五” | 中建三局一公司华东公司：锚定目标，久久为功，奋力实现升维发展", url: "https://mp.weixin.qq.com/s/FfPl0uOq03J5FQBdTuyvrQ" },
+                    { title: "中建三局一公司召开2025年半年运营情况分析会暨第二次改革管理论坛", url: "https://mp.weixin.qq.com/s/Huw-D-XdnSB2bqZ0A2WY1w" },
+                    { title: "产品推介 | 中建三局一公司超高层建筑产品线——上海市杨浦区第一高楼", url: "https://mp.weixin.qq.com/s/HcmeIMz9QxWoaxHDd5IJ3w" },
+                    { title: "啧啧啧，我的机器人同事强到离谱！", url: "https://mp.weixin.qq.com/s/OgxIYKlQap-b5wzRWj2bjA" },
                     { title: "跃动杭州：建筑在千古江南和数字脉搏之间", url: "https://mp.weixin.qq.com/s/h8OobhbAxve9hKYqROETww" }
                 ],
                 reports: [
@@ -434,7 +424,7 @@
                     {
                        id: "rep2",
                        title: "华东公司2025年工作述职报告（大纲）",
-                        paragraphs: [
+                       paragraphs: [
                             "<strong>一、2025年主要工作完成情况</strong>",
                             "<strong>（一）党建引领，筑牢根基，组织活力显著增强</strong>",
                             "• 组织建设强基固本",
@@ -476,7 +466,7 @@
                   {
                        id: "rep3",
                     title: "华东公司团委2025年工作总结和2026年工作计划（大纲）",
-                        paragraphs: [
+                       paragraphs: [
                             "<strong>一、团组织基本情况</strong>",
                             "• 组织建设更趋规范",
                             "• 团员队伍素质优良",
@@ -553,6 +543,14 @@
                             "<strong>（四）创新宣教载体，讲好生动故事</strong>"
                         ]
                     }
+                ],
+                externals: [
+                    { title: "浙江最大“山海协作”科创飞地竣工", url: "https://h.xinhuaxmt.com/vh512/share/12159137?d=134d9b9&channel=weixin" },
+                  { title: "浙江义乌：义乌大剧院音乐厅钢结构封顶", url: "https://www.kdocs.cn/office/link?target=https%3A%2F%2Fh.xinhuaxmt.com%2Fvh512%2Fshare%2F12046175%3Fd%3D134d8de%26channel%3Dweixin&fileId=278293782283" },
+                  { title: "历时452天 上海又一个“科创高地”即将交付", url: "https://app.xinhuanet.com/news/article.html?articleId=12a6e20659f767ed02130bd98a6c1ed0&timestamp=53368" },
+                   { title: "坚守岗位的劳动者", url: "https://www.xinhuanet.com/photo/20250501/3f0b18570d944cdbbb9d6ea2ee6350fa/c.html?page=17" },
+                   { title: "杭州临安：青山湖国际科创中心项目持续推进", url: "https://h.xinhuaxmt.com/vh512/share/12534652?docid=12534652&newstype=1001&d=134ff8e&channel=weixin&time=1746850871007" },
+                    { title: "嘉定加快打造千亿级生物医药产业集群 联影医疗产研基地年底封顶", url: "https://app.xinhuanet.com/news/article.html?articleId=611345de416b48182348cde348eaf459&timestamp=42130" }
                 ],
                 photos: [
                     { id: "photo1", title: "“2025年两岸青年乒乓球友谊赛”志愿服务", src: "photo1.jpg" },
@@ -654,27 +652,9 @@
                     </div>
                 </section>
 
-                <section class="section">
-                    <div class="section-content skills-container">
-                        <h2 class="reveal">技能与其他</h2>
-                        <div class="skills-group reveal delay-1">
-                            <div class="skill-title">${svgs.tool} 核心技能</div>
-                            ${resumeData.skills.core.map(skill => `<span class="badge">${skill}</span>`).join('')}
-                        </div>
-                        <div class="skills-group reveal delay-2">
-                            <div class="skill-title">${svgs.globe} 语言能力</div>
-                            ${resumeData.skills.language.map(lang => `<span class="badge outline">${lang}</span>`).join('')}
-                        </div>
-                        <div class="skills-group reveal delay-3">
-                            <div class="skill-title">${svgs.heart} 兴趣与活动</div>
-                            ${resumeData.skills.others.map(item => `<span class="badge outline">${item}</span>`).join('')}
-                        </div>
-                    </div>
-                </section>
-
                 <section class="section" style="padding-left: 0; padding-right: 0;">
                     <div class="section-content reveal" style="max-width: none; text-align: center;">
-                        <h2 style="margin-bottom: 0;">作品集</h2>
+                        <h2 style="margin-bottom: 0;">作品集（部分）</h2>
                         
                         <div class="swipe-hint-box reveal delay-1">
                             向右侧滑动查看更多
@@ -696,7 +676,7 @@
                                 
                                 <div class="portfolio-page">
                                     <div class="portfolio-page-content">
-                                        <h3 class="portfolio-category">微信公众号文章（节选） <span class="portfolio-page-indicator">1 / 3</span></h3>
+                                        <h3 class="portfolio-category">公众号推文（牵头 节选） <span class="portfolio-page-indicator">1 / 4</span></h3>
                                         <div class="grid-container" style="margin-bottom: 2rem;">
                                             ${resumeData.portfolio.articles.map((art) => `
                                                 <a href="${art.url}" target="_blank" class="glass-card" style="text-decoration: none; padding: 1.2rem 1.8rem;" data-print-details="链接: ${art.url}">
@@ -713,7 +693,7 @@
 
                                 <div class="portfolio-page">
                                     <div class="portfolio-page-content">
-                                        <h3 class="portfolio-category">执笔报告概览（节选） <span class="portfolio-page-indicator">2 / 3</span></h3>
+                                        <h3 class="portfolio-category">主笔报告概览（节选） <span class="portfolio-page-indicator">2 / 4</span></h3>
                                         <div class="grid-container" style="margin-bottom: 2rem;">
                                             ${resumeData.portfolio.reports.map((rep) => `
                                                 <div class="glass-card" onclick="openModal('report', '${rep.id}')" style="padding: 1.2rem 1.8rem;">
@@ -730,7 +710,24 @@
 
                                 <div class="portfolio-page">
                                     <div class="portfolio-page-content">
-                                        <h3 class="portfolio-category">活动现场实况照（节选） <span class="portfolio-page-indicator">3 / 3</span></h3>
+                                        <h3 class="portfolio-category">外宣发布与视频制作（牵头 部分） <span class="portfolio-page-indicator">3 / 4</span></h3>
+                                        <div class="grid-container" style="margin-bottom: 2rem;">
+                                            ${resumeData.portfolio.externals.map((ext) => `
+                                                <a href="${ext.url}" target="_blank" class="glass-card" style="text-decoration: none; padding: 1.2rem 1.8rem;" data-print-details="链接: ${ext.url}">
+                                                    <div class="card-icon-box" style="width: 44px; height: 44px; background: rgba(52, 199, 89, 0.1); color: #34c759;">${svgs.link}</div>
+                                                    <div class="card-content">
+                                                        <div class="card-title" style="font-size: 1.1rem; white-space: normal; text-align: left;">${ext.title}</div>
+                                                        <div class="card-meta" style="color: #34c759; font-size: 0.85rem; margin-top: 0.4rem; text-align: left;">点击查看外部链接 ↗</div>
+                                                    </div>
+                                                </a>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="portfolio-page">
+                                    <div class="portfolio-page-content">
+                                        <h3 class="portfolio-category">活动组织实况及荣誉照片（节选） <span class="portfolio-page-indicator">4 / 4</span></h3>
                                         <div class="photo-grid">
                                             ${resumeData.portfolio.photos.map((photo) => `
                                                 <div class="photo-card" onclick="openModal('photo', '${photo.id}')">
@@ -748,9 +745,27 @@
                 </section>
 
                 <section class="section">
+                    <div class="section-content skills-container">
+                        <h2 class="reveal">技能与其他</h2>
+                        <div class="skills-group reveal delay-1">
+                            <div class="skill-title">${svgs.tool} 核心技能</div>
+                            ${resumeData.skills.core.map(skill => `<span class="badge">${skill}</span>`).join('')}
+                        </div>
+                        <div class="skills-group reveal delay-2">
+                            <div class="skill-title">${svgs.globe} 语言能力</div>
+                            ${resumeData.skills.language.map(lang => `<span class="badge outline">${lang}</span>`).join('')}
+                        </div>
+                        <div class="skills-group reveal delay-3">
+                            <div class="skill-title">${svgs.heart} 兴趣与活动</div>
+                            ${resumeData.skills.others.map(item => `<span class="badge outline">${item}</span>`).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
                     <div class="section-content reveal end-card glass-card" style="display: block; cursor: default; position: relative;">
                         <h2 class="text-gradient">期待与您共创未来！</h2>
-                        <p class="delay-1 reveal">希望能有机会将我扎实的公关运营经验与对行业的热爱融入您的团队。</p>
+                        <p class="delay-1 reveal">希望能有机会将我丰富的品牌运营技能与扎实的党群工作经验融入您的团队工作。</p>
                         
                         <div class="contact-box delay-2 reveal">
                             <div style="font-weight: 600; color: var(--text-primary); font-size: 1.2rem; margin-bottom: 0.5rem; text-align: center; letter-spacing: 1px;">立即联系我</div>
@@ -769,10 +784,10 @@
                         </div>
 
                         <div class="delay-3 reveal" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #d2d2d7;">
-                            <a href="张与姚 - 简历.pdf" target="_blank" class="cta-btn outline" style="background: transparent; border: 2px solid var(--text-primary); color: var(--text-primary); box-shadow: none;">
+                            <button onclick="openPdfViewer('张与姚 - 简历.pdf')" class="cta-btn outline" style="background: transparent; border: 2px solid var(--text-primary); color: var(--text-primary); box-shadow: none; font-family: inherit;">
                                 ${svgs.doc}
                                 查看 张与姚 - 简历
-                            </a>
+                            </button>
                         </div>
                         
                     </div>
@@ -860,6 +875,20 @@
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
         /* ==========================================================================
+           PDF 简历查看器逻辑
+           ========================================================================== */
+        function openPdfViewer(url) {
+            document.getElementById('pdf-iframe').src = url;
+            document.getElementById('pdf-viewer-overlay').classList.add('active');
+        }
+
+        function closePdfViewer() {
+            document.getElementById('pdf-viewer-overlay').classList.remove('active');
+            // 延迟清空 src，等待动画完成
+            setTimeout(() => { document.getElementById('pdf-iframe').src = ""; }, 400);
+        }
+
+        /* ==========================================================================
            作品集横向滚动与拖拽逻辑
            ========================================================================== */
         // 按钮点击滚动逻辑
@@ -879,7 +908,7 @@
             let isDown = false;
             let startX;
             let scrollLeft;
-            let isDragging = false; // 用于判断是否发生拖拽，防止误触内部点击事件
+            let isDragging = false; 
 
             slider.addEventListener('mousedown', (e) => {
                 isDown = true;
@@ -903,12 +932,11 @@
                 if (!isDown) return;
                 e.preventDefault();
                 const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 1.5; // 滑动速度倍率
-                if (Math.abs(walk) > 10) isDragging = true; // 位移超过10px视为拖拽
+                const walk = (x - startX) * 1.5; 
+                if (Math.abs(walk) > 10) isDragging = true; 
                 slider.scrollLeft = scrollLeft - walk;
             });
 
-            // 捕获阶段拦截点击事件：如果刚才在拖拽，则阻止打开模态框或跳转链接
             slider.addEventListener('click', (e) => {
                 if (isDragging) {
                     e.preventDefault();
@@ -920,9 +948,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderApp();
             setTimeout(initScrollReveal, 100);
-            initSliderDrag(); // 初始化作品集拖拽功能
+            initSliderDrag(); 
         });
     </script>
 </body>
-
 </html>
